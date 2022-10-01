@@ -22,7 +22,8 @@ function formatDate(currentTime) {
   return `${currentDay}, ${hours}:${minutes}`;
 }
 
-function displayForecast() {
+function displayForecast(response) {
+  console.log(response.data.daily);
   let forecastElement = document.querySelector("#forecast");
   let days = ["Thu", "Fri", "Sat", "Sun"];
 
@@ -53,10 +54,11 @@ function displayForecast() {
 }
 
 function getForecast(coordinates) {
-  let apiKey = "f81614abe2395d5dfecd45b9298041de";
+  console.log(coordinates);
+  let apiKey = "0a521eaf234a3a56f45252fac3c737ad";
   let apiUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${coordinates.lat}&lon=${coordinates.lon}&appid=${apiKey}&units=metric`;
-  
-  console.log(apiUrl);
+
+  axios.get(apiUrl).then(displayForecast);
 }
 
 function displayWeatherCondition(response) {
@@ -78,10 +80,12 @@ function displayWeatherCondition(response) {
     `http://openweathermap.org/img/wn/${response.data.weather[0].icon}@2x.png`
   );
   iconElement.setAttribute("alt", response.data.weather[0].description);
+
   getForecast(response.data.coord);
+  console.log(response.data);
 }
 function searchCity(city) {
-  let apiKey = "cb498bb9006750b94b5eee4389c0e23c";
+  let apiKey = "0a521eaf234a3a56f45252fac3c737ad";
   let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
   axios.get(apiUrl).then(displayWeatherCondition);
 }
@@ -92,7 +96,7 @@ function handleSubmit(event) {
   searchCity(city);
 }
 function searchLocation(position) {
-  let apiKey = "cb498bb9006750b94b5eee4389c0e23c";
+  let apiKey = "0a521eaf234a3a56f45252fac3c737ad";
   let apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}&appid=${apiKey}&units=metric`;
   axios.get(apiUrl).then(displayWeatherCondition);
 }
@@ -113,4 +117,3 @@ let currentLocationButton = document.querySelector("#current-location-button");
 currentLocationButton.addEventListener("click", getCurrentLocation);
 
 searchCity("Dnipro");
-displayForecast();
